@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DiskScape.Core/DiskScape.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DiskScape.Core.Tests/DiskScape.Core.Tests.csproj" />
+  </Folder>
+</Solution>
