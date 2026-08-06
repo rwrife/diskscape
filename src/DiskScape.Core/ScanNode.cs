@@ -44,5 +44,13 @@ public sealed class ScanNode
 
     internal void AddChild(ScanNode child) => _children.Add(child);
 
+    internal void RemoveChildAt(int index) => _children.RemoveAt(index);
+
+    internal void SubtractAggregate(long bytes, long files)
+    {
+        TotalSize = Math.Max(0, TotalSize - bytes);
+        FileCount = Math.Max(0, FileCount - files);
+    }
+
     internal void SetWarnings(IReadOnlyList<ScanWarning> warnings) => Warnings = warnings;
 }
