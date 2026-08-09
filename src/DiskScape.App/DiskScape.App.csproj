@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>DiskScape.App</RootNamespace>
+    <AssemblyName>diskscape</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+
+    <PackageId>rwrife.diskscape</PackageId>
+    <PackageVersion>1.0.0.0</PackageVersion>
+    <PublisherDisplayName>rwrife</PublisherDisplayName>
+    <Publisher>CN=rwrife</Publisher>
+    <GenerateAppxPackageOnBuild>false</GenerateAppxPackageOnBuild>
+    <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DiskScape.Core\DiskScape.Core.csproj" />
+  </ItemGroup>
+
+</Project>

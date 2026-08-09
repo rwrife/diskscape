@@ -26,14 +26,17 @@ Everything runs locally. No files leave your machine and no cloud account is req
 
 ## How to use (Windows-first quickstart)
 
-> Requires Windows 10/11 (x64) and the .NET 8 Desktop Runtime (bundled in the self-contained build).
+> Requires Windows 10/11 (x64). Portable builds are self-contained (no separate .NET runtime install required).
 
-1. Download the latest `diskscape-win-x64.zip` from Releases (or build from source — see below).
-2. Unzip and run `diskscape.exe`.
-3. Pick a drive (e.g. `C:\`) or **Browse…** to a folder, then click **Scan**.
-4. Watch the treemap fill in. Bigger tile = more space. Click a tile to zoom; breadcrumb to go back.
-5. Right-click any tile → **Open in Explorer**, **Copy path**, or **Delete (Recycle Bin)**.
-6. Optionally toggle the **Sunburst** view or export a report.
+1. Go to [Releases](https://github.com/rwrife/diskscape/releases) and download either:
+   - `diskscape-win-x64.zip` (portable, no install), or
+   - `diskscape-win-x64.msix` (installer/start-menu integration).
+2. For the portable package: unzip and run `diskscape.exe`.
+3. For the MSIX package: install the package, then launch **diskscape** from Start.
+4. Pick a drive (e.g. `C:\`) or **Browse…** to a folder, then click **Scan**.
+5. Watch the treemap fill in. Bigger tile = more space. Click a tile to zoom; breadcrumb to go back.
+6. Right-click any tile → **Open in Explorer**, **Copy path**, or **Delete (Recycle Bin)**.
+7. Optionally toggle the **Sunburst** view or export a report.
 
 ### Build from source
 
@@ -43,6 +46,16 @@ cd diskscape
 dotnet build -c Release
 dotnet run --project src/DiskScape.App
 ```
+
+### Build release artifacts locally (Windows)
+
+```powershell
+pwsh ./build/windows/package.ps1
+```
+
+This produces:
+- `artifacts/release/diskscape-win-x64.zip`
+- `artifacts/release/diskscape-win-x64.msix`
 
 ## Example workflow
 

@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/DiskScape.App/DiskScape.App.csproj" />
     <Project Path="src/DiskScape.Core/DiskScape.Core.csproj" />
   </Folder>
   <Folder Name="/tests/">
