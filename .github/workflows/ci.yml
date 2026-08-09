@@ -50,6 +50,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
       - name: Build release artifacts (portable zip + MSIX)
         shell: pwsh
         run: ./build/windows/package.ps1

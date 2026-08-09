@@ -3,14 +3,14 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "../..")
 $appProject = Join-Path $repoRoot "src/DiskScape.App/DiskScape.App.csproj"
+$wapProject = Join-Path $repoRoot "src/DiskScape.Package/DiskScape.Package.wapproj"
 $artifactRoot = Join-Path $repoRoot "artifacts"
 $publishRoot = Join-Path $artifactRoot "publish/win-x64"
 $releaseRoot = Join-Path $artifactRoot "release"
-$msixRoot = Join-Path $artifactRoot "msix/"
+$wapOutputRoot = Join-Path $repoRoot "src/DiskScape.Package/AppPackages"
 
 New-Item -ItemType Directory -Force -Path $publishRoot | Out-Null
 New-Item -ItemType Directory -Force -Path $releaseRoot | Out-Null
-New-Item -ItemType Directory -Force -Path $msixRoot | Out-Null
 
 Write-Host "Restoring projects..."
 dotnet restore (Join-Path $repoRoot "diskscape.slnx")
@@ -30,21 +30,23 @@ if (Test-Path $zipPath) {
 }
 Compress-Archive -Path (Join-Path $publishRoot "*") -DestinationPath $zipPath -Force
 
-Write-Host "Publishing MSIX package..."
-dotnet publish $appProject `
-  -c Release `
-  -r win-x64 `
-  --self-contained true `
-  -p:WindowsPackageType=MSIX `
-  -p:AppxBundle=Never `
-  -p:UapAppxPackageBuildMode=SideloadOnly `
-  -p:GenerateAppInstallerFile=false `
-  -p:AppxPackageSigningEnabled=false `
-  -p:AppxPackageDir=$msixRoot
+if (-not (Get-Command msbuild -ErrorAction SilentlyContinue)) {
+  throw "msbuild is required for MSIX packaging but was not found in PATH"
+}
 
-$msix = Get-ChildItem -Path $msixRoot -Recurse -Filter *.msix | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+Write-Host "Building MSIX package with wapproj..."
+msbuild $wapProject `
+  /restore `
+  /p:Configuration=Release `
+  /p:Platform=x64 `
+  /p:UapAppxPackageBuildMode=SideloadOnly `
+  /p:AppxBundle=Never `
+  /p:GenerateAppInstallerFile=false `
+  /p:AppxPackageSigningEnabled=false
+
+$msix = Get-ChildItem -Path $wapOutputRoot -Recurse -Filter *.msix | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 if (-not $msix) {
-  throw "MSIX package was not generated under $msixRoot"
+  throw "MSIX package was not generated under $wapOutputRoot"
 }
 
 $msixOut = Join-Path $releaseRoot "diskscape-win-x64.msix"
