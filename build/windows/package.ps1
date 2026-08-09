@@ -39,6 +39,7 @@ msbuild $wapProject `
   /restore `
   /p:Configuration=Release `
   /p:Platform=x64 `
+  /p:RuntimeIdentifier=win-x64 `
   /p:UapAppxPackageBuildMode=SideloadOnly `
   /p:AppxBundle=Never `
   /p:GenerateAppInstallerFile=false `
