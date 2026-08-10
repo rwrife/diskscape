@@ -34,28 +34,13 @@ if (-not (Get-Command msbuild -ErrorAction SilentlyContinue)) {
   throw "msbuild is required for MSIX packaging but was not found in PATH"
 }
 
-$uapDesignTimeRoot = Join-Path ${env:ProgramFiles(x86)} "Windows Kits/10/DesignTime/UAP"
-if (-not (Test-Path $uapDesignTimeRoot)) {
-  throw "Unable to locate UAP SDK root at '$uapDesignTimeRoot'"
-}
-
-$targetPlatformVersion = Get-ChildItem -Path $uapDesignTimeRoot -Directory |
-  Select-Object -ExpandProperty Name |
-  Where-Object { $_ -match '^\d+\.\d+\.\d+\.\d+$' } |
-  Sort-Object { [version]$_ } -Descending |
-  Select-Object -First 1
-
-if (-not $targetPlatformVersion) {
-  throw "No UAP SDK versions found under '$uapDesignTimeRoot'"
-}
-
-Write-Host "Building MSIX package with wapproj (TargetPlatformVersion=$targetPlatformVersion)..."
+Write-Host "Building MSIX package with wapproj..."
 msbuild $wapProject `
   /restore `
   /p:Configuration=Release `
   /p:Platform=x64 `
   /p:RuntimeIdentifier=win-x64 `
-  /p:TargetPlatformVersion=$targetPlatformVersion `
+  /p:TargetPlatformVersion=10.0.19041.0 `
   /p:UapAppxPackageBuildMode=SideloadOnly `
   /p:AppxBundle=Never `
   /p:GenerateAppInstallerFile=false `
