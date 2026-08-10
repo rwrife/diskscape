@@ -53,6 +53,17 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Install Windows 10 SDK (UWP packaging)
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vsInstaller = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
+          $installPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+          if (-not $installPath) {
+            throw "Unable to determine Visual Studio installation path"
+          }
+          & $vsInstaller modify --installPath $installPath --add Microsoft.VisualStudio.Component.Windows10SDK.19041 --quiet --norestart --wait
+
       - name: Build release artifacts (portable zip + MSIX)
         shell: pwsh
         run: ./build/windows/package.ps1
