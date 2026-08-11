@@ -34,14 +34,27 @@ if (-not (Get-Command msbuild -ErrorAction SilentlyContinue)) {
   throw "msbuild is required for MSIX packaging but was not found in PATH"
 }
 
-Write-Host "Building MSIX package with wapproj..."
+$sdkIncludeRoot = Join-Path ${env:ProgramFiles(x86)} "Windows Kits/10/Include"
+$resolvedSdkVersion = $null
+if (Test-Path $sdkIncludeRoot) {
+  $resolvedSdkVersion = Get-ChildItem -Path $sdkIncludeRoot -Directory |
+    Where-Object { $_.Name -match '^\d+\.\d+\.\d+\.\d+$' } |
+    Sort-Object Name -Descending |
+    Select-Object -First 1 -ExpandProperty Name
+}
+
+if (-not $resolvedSdkVersion) {
+  $resolvedSdkVersion = "10.0.19041.0"
+}
+
+Write-Host "Building MSIX package with wapproj using Windows SDK $resolvedSdkVersion..."
 msbuild $wapProject `
   /restore `
   /p:Configuration=Release `
   /p:Platform=x64 `
   /p:RuntimeIdentifier=win-x64 `
   /p:TargetPlatformIdentifier=Windows `
-  /p:TargetPlatformVersion=10.0.19041.0 `
+  /p:TargetPlatformVersion=$resolvedSdkVersion `
   /p:TargetPlatformMinVersion=10.0.17763.0 `
   /p:UapAppxPackageBuildMode=SideloadOnly `
   /p:AppxBundle=Never `
