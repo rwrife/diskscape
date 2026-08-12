@@ -47,6 +47,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DiskScape.App\DiskScape.App.csproj"
                       SkipGetTargetFrameworkProperties="true"
+                      GlobalPropertiesToRemove="TargetPlatformIdentifier;TargetPlatformVersion;TargetPlatformMinVersion"
                       Properties="RuntimeIdentifier=win-x64;SelfContained=true" />
   </ItemGroup>
 
