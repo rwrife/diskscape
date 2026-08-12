@@ -34,17 +34,12 @@ if (-not (Get-Command msbuild -ErrorAction SilentlyContinue)) {
   throw "msbuild is required for MSIX packaging but was not found in PATH"
 }
 
-$sdkIncludeRoot = Join-Path ${env:ProgramFiles(x86)} "Windows Kits/10/Include"
-$resolvedSdkVersion = $null
-if (Test-Path $sdkIncludeRoot) {
-  $resolvedSdkVersion = Get-ChildItem -Path $sdkIncludeRoot -Directory |
-    Where-Object { $_.Name -match '^\d+\.\d+\.\d+\.\d+$' } |
-    Sort-Object Name -Descending |
-    Select-Object -First 1 -ExpandProperty Name
-}
-
-if (-not $resolvedSdkVersion) {
-  $resolvedSdkVersion = "10.0.19041.0"
+# Use a known-good UWP SDK by default (installed in CI), with an explicit
+# override for local packaging environments.
+$resolvedSdkVersion = if ($env:DISKSCAPE_WINDOWS_SDK_VERSION) {
+  $env:DISKSCAPE_WINDOWS_SDK_VERSION
+} else {
+  "10.0.19041.0"
 }
 
 Write-Host "Building MSIX package with wapproj using Windows SDK $resolvedSdkVersion..."
