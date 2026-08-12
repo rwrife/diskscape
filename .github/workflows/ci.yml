@@ -62,7 +62,10 @@ jobs:
           if (-not $installPath) {
             throw "Unable to determine Visual Studio installation path"
           }
-          & $vsInstaller modify --installPath $installPath --add Microsoft.VisualStudio.Component.Windows10SDK.19041 --quiet --norestart --wait
+          & $vsInstaller modify --installPath $installPath `
+            --add Microsoft.VisualStudio.ComponentGroup.UWP.Support `
+            --add Microsoft.VisualStudio.Component.Windows10SDK.19041 `
+            --quiet --norestart --wait
 
       - name: Build release artifacts (portable zip + MSIX)
         shell: pwsh
