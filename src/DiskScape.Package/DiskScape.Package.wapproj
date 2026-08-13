@@ -70,7 +70,7 @@
     <MSBuild Projects="@(ProjectReference->'%(FullPath)')"
              BuildInParallel="$(BuildInParallel)"
              Targets="Publish"
-             Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=true;TargetFramework=net8.0-windows"
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=true;TargetFramework=net8.0-windows;TargetPlatformIdentifier=Windows;TargetPlatformVersion=10.0.19041.0"
              RemoveProperties="TargetPlatformIdentifier;TargetPlatformVersion;TargetPlatformMinVersion" />
   </Target>
 </Project>
