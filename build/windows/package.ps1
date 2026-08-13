@@ -43,8 +43,10 @@ $resolvedSdkVersion = if ($env:DISKSCAPE_WINDOWS_SDK_VERSION) {
 }
 
 Write-Host "Building MSIX package with wapproj using Windows SDK $resolvedSdkVersion..."
+# Restore is performed at the solution level above. Running /restore on the
+# wapproj can leak UAP platform properties into SDK-style project restore graph
+# evaluation (NETSDK1139 on newer SDK toolchains).
 msbuild $wapProject `
-  /restore `
   /p:Configuration=Release `
   /p:Platform=x64 `
   /p:RuntimeIdentifier=win-x64 `

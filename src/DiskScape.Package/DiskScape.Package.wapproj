@@ -69,6 +69,8 @@
   <Target Name="PublishReferences" BeforeTargets="ExpandProjectReferences">
     <MSBuild Projects="@(ProjectReference->'%(FullPath)')"
              BuildInParallel="$(BuildInParallel)"
-             Targets="Publish" />
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=true;TargetFramework=net8.0-windows"
+             RemoveProperties="TargetPlatformIdentifier;TargetPlatformVersion;TargetPlatformMinVersion" />
   </Target>
 </Project>
