@@ -51,7 +51,6 @@ msbuild $wapProject `
   /p:Platform=x64 `
   /p:RuntimeIdentifier=win-x64 `
   /p:BuildProjectReferences=false `
-  /p:TargetPlatformIdentifier=UAP `
   /p:TargetPlatformVersion=$resolvedSdkVersion `
   /p:TargetPlatformMinVersion=10.0.17763.0 `
   /p:UapAppxPackageBuildMode=SideloadOnly `
