@@ -10,7 +10,7 @@
     <AssemblyName>diskscape</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
-    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;any</RuntimeIdentifiers>
 
     <PackageId>rwrife.diskscape</PackageId>
     <PackageVersion>1.0.0.0</PackageVersion>
