@@ -37,7 +37,7 @@ jobs:
         run: dotnet test tests/DiskScape.Core.Tests/DiskScape.Core.Tests.csproj -c Release --no-build
 
   package-windows:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     needs: build-test
     runs-on: windows-latest
 
