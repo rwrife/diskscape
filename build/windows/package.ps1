@@ -15,10 +15,11 @@ New-Item -ItemType Directory -Force -Path $releaseRoot | Out-Null
 Write-Host "Restoring projects..."
 dotnet restore (Join-Path $repoRoot "diskscape.slnx")
 
-# Desktop Bridge invokes GetDeployableContentReferenceOutputs with RuntimeIdentifier=any.
-# Pre-restore that RID so Microsoft.Windows.SDK.NET.Ref runtime packs are available.
-Write-Host "Restoring app project for RuntimeIdentifier=any (MSIX content discovery)..."
-dotnet restore $appProject -p:RuntimeIdentifier=any
+# Desktop Bridge invokes GetDeployableContentReferenceOutputs with RuntimeIdentifier=any
+# and SelfContained=true. Pre-restore with both properties so
+# Microsoft.Windows.SDK.NET.Ref runtime packs are available for that graph.
+Write-Host "Restoring app project for RuntimeIdentifier=any + SelfContained=true (MSIX content discovery)..."
+dotnet restore $appProject -p:RuntimeIdentifier=any -p:SelfContained=true
 
 Write-Host "Publishing self-contained win-x64 app..."
 dotnet publish $appProject `
