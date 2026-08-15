@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '15.0'">
+    <VisualStudioVersion>15.0</VisualStudioVersion>
+  </PropertyGroup>
+
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <WapProjPath Condition="'$(WapProjPath)' == ''">$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\</WapProjPath>
+  </PropertyGroup>
+  <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.props" />
+
+  <PropertyGroup>
+    <ProjectGuid>7C1235C5-49CC-4D44-B4A3-C2AF5C671BA4</ProjectGuid>
+    <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <EntryPointProjectUniqueName>..\DiskScape.App\DiskScape.App.csproj</EntryPointProjectUniqueName>
+    <GenerateAppInstallerFile>false</GenerateAppInstallerFile>
+    <AppxAutoIncrementPackageRevision>false</AppxAutoIncrementPackageRevision>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <AppxBundle>Never</AppxBundle>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DiskScape.App\DiskScape.App.csproj"
+                      SkipGetTargetFrameworkProperties="true"
+                      GlobalPropertiesToRemove="TargetPlatformIdentifier;TargetPlatformVersion;TargetPlatformMinVersion"
+                      Properties="RuntimeIdentifier=win-x64;SelfContained=true" />
+  </ItemGroup>
+
+  <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
+
+  <PropertyGroup>
+    <PackageOutputGroups>@(PackageOutputGroups);__GetPublishItems</PackageOutputGroups>
+    <DebuggerType>CoreClr</DebuggerType>
+  </PropertyGroup>
+
+  <Target Name="_ValidateAppReferenceItems" />
+
+  <Target Name="_FixEntryPoint" AfterTargets="_ConvertItems">
+    <PropertyGroup>
+      <EntryPointExe>DiskScape.App\diskscape.exe</EntryPointExe>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="PublishReferences" BeforeTargets="ExpandProjectReferences">
+    <MSBuild Projects="@(ProjectReference->'%(FullPath)')"
+             BuildInParallel="$(BuildInParallel)"
+             Targets="Publish"
+             Properties="Configuration=$(Configuration);RuntimeIdentifier=win-x64;SelfContained=true;TargetFramework=net8.0-windows;TargetPlatformIdentifier=Windows;TargetPlatformVersion=10.0.19041.0"
+             RemoveProperties="TargetPlatformIdentifier;TargetPlatformVersion;TargetPlatformMinVersion" />
+  </Target>
+</Project>
